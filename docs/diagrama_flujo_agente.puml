@@ -1,0 +1,51 @@
+@startuml
+actor Usuario
+participant "Chatwoot (CRM)" as Chatwoot
+participant "Agente IA (Laburen)" as Agente
+participant "MCP (HTTP API)" as MCP
+database "Base de Datos" as DB
+
+== Exploración de productos ==
+
+Usuario -> Chatwoot: Mensaje (consulta de productos)
+Chatwoot -> Agente: Entrega mensaje
+
+Agente -> MCP: GET /products/search
+MCP -> DB: Buscar productos
+DB --> MCP: Lista de productos
+MCP --> Agente: Resultados
+
+Agente -> Chatwoot: Muestra productos
+Chatwoot -> Usuario: Respuesta
+
+== Creación de carrito ==
+
+Usuario -> Chatwoot: Intención de compra
+Chatwoot -> Agente: Intención detectada
+
+Agente -> MCP: POST /cart
+MCP -> DB: Crear carrito
+DB --> MCP: cart_id
+MCP --> Agente: Carrito creado
+
+Agente -> MCP: POST /cart/items
+MCP -> DB: Agregar producto
+DB --> MCP: OK
+MCP --> Agente: Confirmación
+
+Agente -> Chatwoot: Confirma carrito
+Chatwoot -> Usuario: Carrito actualizado
+
+== Edición de carrito (opcional) ==
+
+Usuario -> Chatwoot: Modificar carrito
+Chatwoot -> Agente: Solicitud de edición
+
+Agente -> MCP: PUT /cart/items/{id}
+MCP -> DB: Actualizar ítem
+DB --> MCP: OK
+MCP --> Agente: Confirmación
+
+Agente -> Chatwoot: Carrito actualizado
+Chatwoot -> Usuario: Confirmación final
+@enduml

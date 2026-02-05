@@ -140,3 +140,11 @@ Esta capacidad permite una transición controlada desde el agente automático a 
 - El MCP actúa como contrato explícito entre el agente y el backend
 
 - El diseño prioriza claridad, mantenibilidad y extensibilidad
+
+## Diagrama de flujo de interacción del agente
+
+El siguiente diagrama de secuencia ilustra cómo el agente de IA interactúa con el usuario,
+el CRM, el MCP y la base de datos durante el proceso de exploración de productos,
+creación de carrito y edición del carrito.
+
+Ver archivo: `diagrama_flujo_agente.puml`
