@@ -2,7 +2,7 @@
 
 El objetivo del agente de IA es asistir a un usuario en un proceso de compra, manteniendo una conversación natural y coherente, y delegando el acceso a datos y acciones de negocio a través de un Model Context Protocol (MCP).
 
-## El agente:
+## Rol dEl agente:
 
 - Interpreta lenguaje natural
 
@@ -16,7 +16,7 @@ Este enfoque permite desacoplar la inteligencia conversacional del acceso a dato
 
 # 2. Arquitectura General
 
-## El sistema está compuesto por los siguientes componentes:
+El sistema está compuesto por los siguientes componentes:
 
 Usuario (WhatsApp)
         ↓
@@ -33,9 +33,9 @@ El usuario final nunca interactúa directamente con la API.
 
 # 3. Modelo de Datos
 
-## El modelo de datos implementa el esquema mínimo requerido:
+El modelo de datos implementa el esquema mínimo requerido:
 
-- Tabla products
+## Tabla products
 
 - id (PK)
 
@@ -49,7 +49,7 @@ El usuario final nunca interactúa directamente con la API.
 
 Los productos se importan desde un archivo products.xlsx provisto por la empresa y representan la fuente única de verdad del catálogo.
 
-- Tabla carts
+## Tabla carts
 
 - id (PK)
 
@@ -57,9 +57,9 @@ Los productos se importan desde un archivo products.xlsx provisto por la empresa
 
 - updated_at
 
-## Existe un carrito por conversación, asociado al contexto del agente.
+Existe un carrito por conversación, asociado al contexto del agente.
 
-- Tabla cart_items
+## Tabla cart_items
 
 - id (PK)
 
@@ -69,11 +69,11 @@ Los productos se importan desde un archivo products.xlsx provisto por la empresa
 
 - qty
 
-## Permite representar múltiples productos dentro de un mismo carrito.
+Permite representar múltiples productos dentro de un mismo carrito.
 
 # 4. Endpoints MCP
 
-## El MCP expone un conjunto reducido y explícito de capacidades que el agente puede utilizar.
+El MCP expone un conjunto reducido y explícito de capacidades que el agente puede utilizar.
 
 | Método	| Endpoint	       | Descripción                                |
 
@@ -85,11 +85,11 @@ Los productos se importan desde un archivo products.xlsx provisto por la empresa
 | PUT	    | /cart/items/{id} | Actualizar cantidad o eliminar un ítem     |
 | POST	    | /handoff	       | Derivar la conversación a un agente humano |
 
-## Cada endpoint representa una capacidad explícita del agente, siguiendo el principio de responsabilidad única.
+Cada endpoint representa una capacidad explícita del agente, siguiendo el principio de responsabilidad única.
 
 # 5. Flujo de Interacción del Agente
 
-### Exploración de Productos
+## Exploración de Productos
 
 Usuario expresa una necesidad
         ↓
@@ -103,7 +103,7 @@ API consulta la base de datos
         ↓
 Agente presenta resultados y guía al usuario
 
-### Mostrar Detalle de Producto
+## Mostrar Detalle de Producto
 
 Usuario solicita más información
         ↓
@@ -113,7 +113,7 @@ Agente invoca MCP → /products/{id}
         ↓
 Agente presenta información detallada
 
-### Creacion de carrito de Compras
+## Creacion de carrito de Compras
 
 Usuario expresa intención de compra
         ↓
@@ -125,9 +125,9 @@ Agente agrega ítems → /cart/items
         ↓
 Agente confirma el contenido del carrito
 
-## El agente agrega etiquetas en el CRM para reflejar los productos seleccionados por el usuario.
+El agente agrega etiquetas en el CRM para reflejar los productos seleccionados por el usuario.
 
-### Edición de Carrito
+## Edición de Carrito
 
 Usuario solicita modificar el carrito
         ↓
@@ -148,7 +148,7 @@ Se crea conversación en Chatwoot
         ↓
 Se agregan etiquetas de contexto
 
-## Esta capacidad permite una transición controlada desde el agente automático a un operador humano.
+Esta capacidad permite una transición controlada desde el agente automático a un operador humano.
 
 # 7. Consideraciones de Diseño
 
