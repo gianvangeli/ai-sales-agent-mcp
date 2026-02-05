@@ -1,0 +1,30 @@
+# Entorno virtual
+venv/
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# Pandas / temporales
+*.csv
+*.xlsx~
+*.tmp
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
