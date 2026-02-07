@@ -10,7 +10,7 @@ database "Base de Datos" as DB
 Usuario -> Chatwoot: Mensaje (consulta de productos)
 Chatwoot -> Agente: Entrega mensaje
 
-Agente -> MCP: GET /products/search
+Agente -> MCP: GET /products/search (filtros)
 MCP -> DB: Buscar productos
 DB --> MCP: Lista de productos
 MCP --> Agente: Resultados
@@ -23,7 +23,7 @@ Chatwoot -> Usuario: Respuesta
 Usuario -> Chatwoot: Intención de compra
 Chatwoot -> Agente: Intención detectada
 
-Agente -> MCP: POST /cart
+Agente -> MCP: POST /cart (por conversacion)
 MCP -> DB: Crear carrito
 DB --> MCP: cart_id
 MCP --> Agente: Carrito creado
