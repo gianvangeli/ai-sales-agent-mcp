@@ -33,6 +33,6 @@ def inicializar_base_de_datos() -> None:
     crear_tabla_handoffs(conn)
     conn.close()
 
-app.include_router(products_router)
+app.include_router(products_router, prefix="/products", tags=["products"])
 app.include_router(cart_router)
-app.include_router(handoff_router)
+app.include_router(handoff_router, prefix="/cart", tags=["cart"])
