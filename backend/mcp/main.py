@@ -15,16 +15,23 @@ app.include_router(cart_router, prefix="/cart", tags=["cart"])
 @app.on_event("startup")
 def inicializar_base_de_datos():
     conn = get_connection()
-    crear_tabla_productos(conn)
 
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM products")
+    cursor.execute("SELECT count(*) FROM products")
     cantidad = cursor.fetchone()[0]
 
+    print(f"[STARTUP] Productos en DB: {cantidad}")
+
     if cantidad == 0:
-        import_products()
+        print("[STARTUP] Importando productos...")
+        try:
+            import_products()
+            print("[STARTUP] Importación ok")
+        except Exception as e:
+            print(f"[STARTUP] ERROR importando products: {e}")
 
     conn.close()
+
     
     
 

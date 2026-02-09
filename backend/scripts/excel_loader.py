@@ -1,55 +1,24 @@
-import pandas as pd
-import unicodedata
 from pathlib import Path
+import pandas as pd
 
-def normalizar_nombre_columna(nombre:str) -> str:
+BASE_DIR = Path(__file__).resolve().parents[2]  # backend/
+
+def cargar_productos_desde_excel(nombre_archivo: str) -> pd.DataFrame:
     """
-    Normaliza un nombre de columna:
-    -Elimina tildes
-    -Convierte a mayusculas
-    -Remplaza espacios por guiones
-    Args:
-        nombre(str)
-    Returns:
-        str
+    Carga el Excel de productos usando una ruta absoluta
+    en producción (Render, Docker, etc).
     """
 
-    nombre = nombre.strip().upper().replace(" ", "_")
-    nombre = unicodedata.normalize("NFKD", nombre)
-    nombre = nombre.encode("ascii", "ignore").decode("ascii")
+    ruta = BASE_DIR / nombre_archivo
 
-    return nombre
+    print(f"[EXCEL] Intentando cargar Excel en: {ruta}")
 
-def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Normaliza todas las comunas del DataFrame.
-
-    Args:
-        df(pd.DataFrame): Datos crudos del Excel
-    Returns:
-        DataFrame con columnas normalizadas.
-    """
-
-    df = df.copy()
-    df.columns = [normalizar_nombre_columna(col) for col in df.columns]
-    return df
-
-def cargar_productos_desde_excel(ruta_archivo: str | Path) -> pd.DataFrame:
-    """
-    Carga el archivo Excel y devuelve un DataFrame con columnas normalizadas .
-
-    Args:
-        ruta_archivo (str): Ruta del archivo Excel
-    
-    Returns:
-        pd.DataFrama: DataFrame con columnas normalizadas
-    """
-    ruta = Path(ruta_archivo)
-    
+    # Verifico que exista
     if not ruta.exists():
-        raise FileNotFoundError(f"No se encontro el archivo: {ruta}")
-    
-    df = pd.read_excel(ruta)
-    df = normalizar_columnas(df)
+        raise FileNotFoundError(f"Excel de productos no encontrado en: {ruta}")
+
+    df = pd.read_excel(ruta, engine="openpyxl")
+
+    print(f"[EXCEL] Excel cargado con éxito: filas={df.shape[0]} columnas={df.shape[1]}")
 
     return df
