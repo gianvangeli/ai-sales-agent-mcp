@@ -93,13 +93,13 @@ def buscar_productos(conn: sqlite3.Connection, filtros: dict) -> list [dict]:
             stock,
             disponible
         FROM products
-        WHERE 1 = 1
+        WHERE 1=1
     """
 
     parametros: list = []
 
     if "nombre" in filtros :
-        query += "AND nombre = LIKE ?"
+        query += "AND nombre LIKE ?"
         parametros.append(f"%{filtros["nombre"]}%")
 
     if "color" in filtros:

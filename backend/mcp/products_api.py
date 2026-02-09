@@ -18,12 +18,14 @@ def search_products(
     color: str | None = Query(default=None),
     talle: str | None = Query(default=None),
     categoria: str | None = Query(default=None),
-    solo_disponibles: bool = Query(default=True),
+    solo_disponibles: bool = True,
 ):
     """
     Busca productos aplicando filtros dinámicos.
     Todos los parámetros son opcionales.
     """
+    conn = get_connection()
+
     filtros = {
         "nombre": nombre,
         "color": color,
@@ -32,13 +34,13 @@ def search_products(
         "solo_disponibles": solo_disponibles,
     }
 
-    conn = get_connection()
+    
     productos = buscar_productos(conn, filtros)
     conn.close()
 
-    productos = [_normalize_product(p) for p in productos]
-
-    return {"count": len(productos), "results": productos}
+    
+    return {"count": len(productos), 
+            "results": productos}
 
 
 @router.get("/{product_id}")
