@@ -19,7 +19,7 @@ def search_products(
     color: str | None = Query(default=None),
     talle: str | None = Query(default=None),
     categoria: str | None = Query(default=None),
-    solo_disponibles: bool = True,
+    solo_disponibles: bool | None = Query(default=None),
 ):
     """
     Busca productos aplicando filtros dinámicos.
@@ -32,11 +32,17 @@ def search_products(
         "color": color,
         "talle": talle,
         "categoria": categoria,
-        "solo_disponibles": solo_disponibles,
+        
     }
 
     
     productos = buscar_productos(conn, filtros)
+    # Si solo_disponibles == True, filtramos en memoria
+    if solo_disponibles:
+        productos = [p for p in productos if p.get("disponible")]
+
+
+
     conn.close()
 
     

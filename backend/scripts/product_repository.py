@@ -65,22 +65,13 @@ def insertar_productos(conn: sqlite3.Connection, productos: list[dict]) -> None:
 
     conn.commit()
 
-def buscar_productos(conn: sqlite3.Connection, filtros: dict) -> list [dict]:
+def buscar_productos(conn: sqlite3.Connection, filtros: dict) -> list[dict]:
     """
-    Busca productos aplicando filtros dinamicos.
-    Args:
-        conn(sqlite3.Connection): Conexion activa a la base de datos.
-        filtros(dict): Diccionario con filtros posibles.
-        Claves soportadas:
-        - nombre
-        - color
-        - talle
-        - categoria
-        - solo_disponible(bool)
-    Returns:
-        list[dict]: Lista de productos que coinciden con los filtros
-  
+    Busca productos aplicando filtros dinámicos.
+    Si no se pasa ningún filtro, devuelve todos los productos.
     """
+
+    
     query = """
         SELECT
             id,
@@ -96,34 +87,36 @@ def buscar_productos(conn: sqlite3.Connection, filtros: dict) -> list [dict]:
         WHERE 1=1
     """
 
-    parametros: list = []
+    parametros = []
 
-    if "nombre" in filtros :
-        query += "AND nombre LIKE ?"
-        parametros.append(f"%{filtros["nombre"]}%")
+    
+    if filtros.get("nombre"):
+        query += " AND nombre LIKE ?"
+        parametros.append(f"%{filtros['nombre']}%")
 
-    if "color" in filtros:
-        query += "AND color = ?"
+    
+    if filtros.get("color"):
+        query += " AND color = ?"
         parametros.append(filtros["color"])
 
-    if "talle" in filtros:
-        query += "AND talle = ?"
+    if filtros.get("talle"):
+        query += " AND talle = ?"
         parametros.append(filtros["talle"])
+
     
-    if "categoria" in filtros:
-        query += "AND categoria = ?"
+    if filtros.get("categoria"):
+        query += " AND categoria = ?"
         parametros.append(filtros["categoria"])
-    
-    if filtros.get("solo_disponibles"):
-        query += "AND disponible = 1"
-    
+
+   
+    # Ejecutar consulta
     cursor = conn.cursor()
     cursor.execute(query, parametros)
 
     columnas = [col[0] for col in cursor.description]
-    
-    return [dict(zip(columnas, fila ))
-            for fila in cursor.fetchall()]
+    filas = cursor.fetchall()
+
+    return [dict(zip(columnas, fila)) for fila in filas]
 
 
 def obtener_producto_por_id(conn: sqlite3.Connection, product_id: str) -> dict | None:
