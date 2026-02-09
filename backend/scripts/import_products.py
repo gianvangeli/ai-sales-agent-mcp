@@ -1,4 +1,4 @@
-import sqlite3
+from mcp.database import get_connection
 from .excel_loader import cargar_productos_desde_excel
 from .product_mapper import mapear_excel
 from .product_repository import crear_tabla_productos, insertar_productos
@@ -13,7 +13,7 @@ def main() -> None:
     df = cargar_productos_desde_excel("products.xlsx")
     productos = mapear_excel(df)
 
-    conn = sqlite3.connect("database/database.sqlite")
+    conn = get_connection()
 
     crear_tabla_productos(conn)
     insertar_productos(conn, productos)
