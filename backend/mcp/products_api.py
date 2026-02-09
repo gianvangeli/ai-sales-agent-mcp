@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query, HTTPException
 from mcp.database import get_connection
-from backend.scripts.product_repository import buscar_productos, obtener_producto_por_id
+from scripts.product_repository import buscar_productos, obtener_producto_por_id
 
 router = APIRouter()
 

@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from mcp.products_api import router as products_router
 from mcp.cart_api import router as cart_router
 from mcp.database import get_connection
-from backend.scripts.product_repository import crear_tabla_productos
-from backend.scripts.import_products import main as import_products
+from scripts.product_repository import crear_tabla_productos
+from scripts.import_products import main as import_products
 
 
 
