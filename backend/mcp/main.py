@@ -2,37 +2,30 @@ from fastapi import FastAPI
 from mcp.products_api import router as products_router
 from mcp.cart_api import router as cart_router
 from mcp.database import get_connection
+from scripts.import_products import main as import_products
 
-from scripts.product_repository import crear_tabla_productos
-from scripts.cart_repository import crear_tablas_carrito
-from scripts.handoff_repository import crear_tabla_handoffs
-from mcp.handoff_api import router as handoff_router
+import sqlite3
+import os
 
-
-app = FastAPI(
-    title="MCP - Agente de Compras",
-    description="API HTTP consumida por un agente de IA",
-    version="1.0.0"
-)
-
-@app.on_event("startup")
-def inicializar_base_de_datos() -> None:
-    """
-    Inicializa (si no existen) las tablas necesarias del sistema.
-
-    Se ejecuta automáticamente al levantar la aplicación y garantiza que:
-    - products exista
-    - carts exista
-    - cart_items exista
-
-    Esto evita errores en runtime cuando el agente consume endpoints.
-    """
-    conn = get_connection()
-    crear_tabla_productos(conn)
-    crear_tablas_carrito(conn)
-    crear_tabla_handoffs(conn)
-    conn.close()
+app = FastAPI(title="MCP - AI Sales Agent")
 
 app.include_router(products_router, prefix="/products", tags=["products"])
-app.include_router(cart_router)
-app.include_router(handoff_router, prefix="/cart", tags=["cart"])
+app.include_router(cart_router, prefix="/cart", tags=["cart"])
+
+@app.on_event("startup")
+def inicializar_base_de_datos():
+    conn = get_connection()
+    # Si la tabla está vacía, importamos
+    cursor = conn.cursor()
+    cursor.execute("SELECT count(*) FROM products")
+    cantidad = cursor.fetchone()[0]
+    if cantidad == 0:
+        print("Importando productos desde Excel...")
+        import_products()
+        print("Importación completada correctamente.")
+    conn.close()
+
+@app.get("/health")
+def health() -> dict:
+    """Endpoint simple para verificar que el servicio está vivo."""
+    return {"status": "ok"}
