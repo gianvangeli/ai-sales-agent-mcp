@@ -1,7 +1,7 @@
 import sqlite3
 from .excel_loader import cargar_productos_desde_excel
-from product_mapper import mapear_excel
-from product_repository import crear_tabla_productos, insertar_productos
+from .product_mapper import mapear_excel
+from .product_repository import crear_tabla_productos, insertar_productos
 
 
 
