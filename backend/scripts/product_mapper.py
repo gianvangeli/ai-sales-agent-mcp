@@ -1,36 +1,41 @@
 import pandas as pd
 
-def mapear_excel(df: pd.DataFrame) -> list[dict] :
+def normalizar_columna_nombre(col: str) -> str:
     """
-    Transforma el DataFrame del Excel en una lista de productos
-    con el formato interno del sistema.
-    
-    Args:
-        df(pd.DataFrame): DataFrame con columnas normalizados
-    Returns:
-        list[dict] : Lista de productos mapeados
+    Normaliza el nombre de la columna:
+    - Pasa a mayúsculas
+    - Quita acentos
+    - Reemplaza espacios por guion bajo
+    """
+    import unicodedata
+    col = col.strip()
+    col = unicodedata.normalize("NFKD", col).encode("ASCII", "ignore").decode("ASCII")
+    col = col.replace(" ", "_").upper()
+    return col
+
+def mapear_excel(df: pd.DataFrame) -> list[dict]:
+    """
+    Transforma el DataFrame del Excel al formato interno del sistema,
+    normalizando las columnas.
     """
 
-    productos: list[dict] = []
+    # Normalizar columnas
+    df = df.rename(columns={col: normalizar_columna_nombre(col) for col in df.columns})
+
+    productos = []
 
     for _, fila in df.iterrows():
         producto = {
-            "id" : str(fila["ID"]).zfill(3),
-            "nombre": fila["TIPO_PRENDA"],
-            "descripcion": fila["DESCRIPCION"],
-            "categoria": fila["CATEGORIA"],
-            "color": fila["COLOR"],
-            "talle": fila["TALLA"],
-            "precio_unitario": float(fila["PRECIO_50_U"]),
-            "stock": int(fila["CANTIDAD_DISPONIBLE"]),
-            "disponible": str(fila["DISPONIBLE"]).strip().upper() == "SI"
+            "id": str(fila["ID"]),
+            "nombre": fila.get("TIPO_PRENDA", ""),
+            "descripcion": fila.get("DESCRIPCION", ""),
+            "categoria": fila.get("CATEGORIA", ""),
+            "color": fila.get("COLOR", ""),
+            "talle": fila.get("TALLA", ""),
+            "precio": float(fila.get("PRECIO_50_U", 0)),
+            "stock": int(fila.get("CANTIDAD_DISPONIBLE", 0)),
+            "disponible": str(fila.get("DISPONIBLE", "")).lower() in ["si", "yes", "true", "1"]
         }
-
         productos.append(producto)
 
     return productos
-    
-
-    
-
-    

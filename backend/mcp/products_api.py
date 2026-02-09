@@ -7,6 +7,7 @@ router = APIRouter()
 
 def _normalize_product(p: dict) -> dict:
     """Convierte campos para salida de API (ej: disponible 0/1 -> bool)."""
+    
     if "disponible" in p:
         p["disponible"] = bool(p["disponible"])
     return p
