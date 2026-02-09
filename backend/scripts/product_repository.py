@@ -58,7 +58,7 @@ def insertar_productos(conn: sqlite3.Connection, productos: list[dict]) -> None:
             producto["categoria"],
             producto["color"],
             producto["talle"],
-            producto["precio_unitario"],
+            producto["precio"],
             producto["stock"],
             producto["disponible"]
         ))

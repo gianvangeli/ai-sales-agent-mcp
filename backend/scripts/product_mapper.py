@@ -1,4 +1,7 @@
 import pandas as pd
+import unicodedata
+from pathlib import Path
+
 
 def normalizar_columna_nombre(col: str) -> str:
     """
@@ -7,7 +10,7 @@ def normalizar_columna_nombre(col: str) -> str:
     - Quita acentos
     - Reemplaza espacios por guion bajo
     """
-    import unicodedata
+    
     col = col.strip()
     col = unicodedata.normalize("NFKD", col).encode("ASCII", "ignore").decode("ASCII")
     col = col.replace(" ", "_").upper()
