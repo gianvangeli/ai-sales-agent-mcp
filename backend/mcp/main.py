@@ -17,9 +17,11 @@ def inicializar_base_de_datos():
     # 1) Crear tablas si no existen
     from scripts.product_repository import crear_tabla_productos
     from scripts.cart_repository import crear_tablas_carrito
+    from scripts.import_products  import import_products 
 
     crear_tabla_productos(conn)
     crear_tablas_carrito(conn)
+    conn.commit()
 
     # 2) Comprobar si hay productos
     try:

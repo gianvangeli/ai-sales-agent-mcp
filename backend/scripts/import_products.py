@@ -3,23 +3,33 @@ from .excel_loader import cargar_productos_desde_excel
 from .product_mapper import mapear_excel
 from .product_repository import crear_tabla_productos, insertar_productos
 
-
-
-def main() -> None:
+def import_products(conn:None) -> None:
     """
     Punto de entrada del proceso de importacion de productos.
-
     """
     df = cargar_productos_desde_excel("products.xlsx")
     productos = mapear_excel(df)
 
-    conn = get_connection()
+    # Si no se pasa conexión, crear una nueva
+    if conn is None:
+        conn = get_connection()
+        debe_cerrar = True
+    else:
+        debe_cerrar = False
 
     crear_tabla_productos(conn)
     insertar_productos(conn, productos)
 
-    conn.close()
+    if debe_cerrar:
+        conn.close()
+    
     print(f" {len(productos)} Productos importados correctamente")
+
+
+def main() -> None:
+    """Wrapper para ejecutar desde línea de comandos"""
+    import_products()
+   
 
 
 
