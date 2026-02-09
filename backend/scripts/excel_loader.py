@@ -1,24 +1,23 @@
 from pathlib import Path
 import pandas as pd
 
-BASE_DIR = Path(__file__).resolve().parents[2]  # backend/
-
 def cargar_productos_desde_excel(nombre_archivo: str) -> pd.DataFrame:
     """
     Carga el Excel de productos usando una ruta absoluta
-    en producción (Render, Docker, etc).
+    basada en la carpeta donde está este script.
     """
 
-    ruta = BASE_DIR / nombre_archivo
+    # La carpeta base es el padre de scripts, es decir: backend/
+    ruta_base = Path(__file__).resolve().parents[2]  # backend/
+    ruta_excel = ruta_base / nombre_archivo
 
-    print(f"[EXCEL] Intentando cargar Excel en: {ruta}")
+    print(f"[EXCEL] Intentando cargar Excel en: {ruta_excel}")
 
-    # Verifico que exista
-    if not ruta.exists():
-        raise FileNotFoundError(f"Excel de productos no encontrado en: {ruta}")
+    if not ruta_excel.exists():
+        raise FileNotFoundError(f"Excel de productos no encontrado en: {ruta_excel}")
 
-    df = pd.read_excel(ruta, engine="openpyxl")
+    df = pd.read_excel(ruta_excel, engine="openpyxl")
 
-    print(f"[EXCEL] Excel cargado con éxito: filas={df.shape[0]} columnas={df.shape[1]}")
+    print(f"[EXCEL] Excel cargado con éxito: filas={df.shape[0]}, columnas={df.shape[1]}")
 
     return df
