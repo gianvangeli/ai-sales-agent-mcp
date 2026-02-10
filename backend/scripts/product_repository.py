@@ -92,6 +92,9 @@ def buscar_productos(conn: sqlite3.Connection, filtros: dict) -> list[dict]:
     
     if filtros.get("nombre"):
         query += " AND nombre LIKE ?"
+
+
+        
         parametros.append(f"%{filtros['nombre']}%")
 
     

@@ -6,7 +6,7 @@ El proyecto forma parte del **Desafío Técnico – AI Engineer para Laburen.com
 
 ---
 
-## 🎯 Objetivo
+## Objetivo
 
 Diseñar e implementar un backend que permita a un **agente de IA**:
 
@@ -20,7 +20,7 @@ El agente **no contiene lógica de negocio**, sino que consume capacidades expl�
 
 ---
 
-## 🧠 Arquitectura General
+## Arquitectura General
 Usuario (WhatsApp)
 ↓
 Chatwoot (CRM)
@@ -64,7 +64,7 @@ ai-sales-agent-mcp/
 │
 └── README.md
 
-## 🗄️ Modelo de Datos
+## Modelo de Datos
 
 ### products
 - id (PK)
@@ -90,7 +90,7 @@ ai-sales-agent-mcp/
 
 ---
 
-## 🔌 Endpoints MCP
+## Endpoints MCP
 
 ### Productos
 - `GET /products/search`  
@@ -112,9 +112,11 @@ ai-sales-agent-mcp/
 - `PUT /cart/{cart_id}/items/{product_id}`  
   Actualiza cantidad o elimina un ítem.
 
----
 
-## ▶️ Cómo ejecutar el proyecto localmente
+
+
+
+## Cómo ejecutar el proyecto localmente
 
 ### 1. Crear entorno virtual
 ```bash
